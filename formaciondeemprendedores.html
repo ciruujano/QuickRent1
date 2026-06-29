@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickRent | Renta lo que necesites por día</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            DEFAULT: '#2563eb',
+                            dark: '#1d4ed8',
+                            light: '#60a5fa'
+                        },
+                        dark: '#0f172a'
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        html { scroll-behavior: smooth; }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+        /* Clases para ocultar/mostrar vistas SPA */
+        .page-view { display: none; }
+        .page-view.active { display: block; animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans antialiased flex flex-col min-h-screen">
+
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 glass-effect border-b border-gray-200 shadow-sm transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center cursor-pointer" onclick="navigateTo('home')">
+                    <i class="fa-solid fa-arrows-rotate text-brand text-3xl mr-2"></i>
+                    <span class="font-bold text-2xl tracking-tight text-dark">Quick<span class="text-brand">Rent</span></span>
+                </div>
+
+                <!-- Menú Derecho -->
+                <div class="hidden md:flex items-center space-x-6">
+                    <button onclick="navigateTo('explore')" class="text-gray-600 hover:text-brand font-medium transition">Explorar</button>
+                    <button onclick="navigateTo('how-it-works')" class="text-gray-600 hover:text-brand font-medium transition">Cómo funciona</button>
+                    <button onclick="openModal('uploadModal')" class="bg-brand hover:bg-brand-dark text-white px-5 py-2.5 rounded-full font-semibold transition shadow-md flex items-center">
+                        <i class="fa-solid fa-plus mr-2"></i> Alquilar mi artículo
+                    </button>
+                    <div class="h-10 w-10 rounded-full bg-gray-200 border-2 border-brand flex items-center justify-center cursor-pointer overflow-hidden">
+                        <img src="https://ui-avatars.com/api/?name=Usuario+Perfil&background=e2e8f0&color=2563eb" alt="Perfil">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- CONTENEDOR DE VISTAS (SPA) -->
+    <main class="flex-grow pt-20">
+        
+        <!-- === VISTA: INICIO === -->
+        <div id="home" class="page-view active">
+            <!-- Hero Section -->
+            <section class="pt-12 pb-20 px-4 sm:px-6 lg:px-8 bg-dark text-white relative overflow-hidden">
+                <div class="absolute inset-0 opacity-20">
+                    <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=2000&q=80" alt="Fondo" class="w-full h-full object-cover">
+                </div>
+                <div class="max-w-4xl mx-auto relative z-10 text-center">
+                    <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-6 leading-tight">
+                        No lo compres, <span class="text-brand-light">¡réntalo por un día!</span>
+                    </h1>
+                    <p class="text-lg md:text-xl text-gray-300 mb-10 max-w-2xl mx-auto">
+                        Accede a herramientas, tecnología y equipos de primer nivel sin gastar de más. Alquila lo que necesitas de personas cerca de ti.
+                    </p>
+                    
+                    <!-- Buscador Principal -->
+                    <div class="bg-white p-3 rounded-2xl md:rounded-full shadow-2xl flex flex-col md:flex-row items-center gap-3">
+                        <div class="flex-1 w-full relative">
+                            <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                            <input type="text" placeholder="Ej: Taladro, Cámara, Bicicleta..." class="w-full pl-10 pr-4 py-3 text-gray-800 rounded-full focus:outline-none">
+                        </div>
+                        <button onclick="navigateTo('explore')" class="w-full md:w-auto bg-brand hover:bg-brand-dark text-white px-8 py-3 rounded-full font-bold transition">
+                            Buscar
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Categorías Populares -->
+            <section class="py-16 bg-white">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <h2 class="text-2xl font-bold text-dark mb-8 text-center md:text-left">Categorías Populares</h2>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+                        <div onclick="navigateTo('explore', 'Herramientas')" class="group bg-gray-50 border border-gray-100 hover:border-brand hover:shadow-md p-6 rounded-2xl flex flex-col items-center justify-center cursor-pointer transition">
+                            <div class="w-14 h-14 bg-brand/10 text-brand rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition">
+                                <i class="fa-solid fa-toolbox text-2xl"></i>
+                            </div>
+                            <span class="font-semibold text-gray-700">Herramientas</span>
+                        </div>
+                        <div onclick="navigateTo('explore', 'Tecnología')" class="group bg-gray-50 border border-gray-100 hover:border-brand hover:shadow-md p-6 rounded-2xl flex flex-col items-center justify-center cursor-pointer transition">
+                            <div class="w-14 h-14 bg-brand/10 text-brand rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition">
+                                <i class="fa-solid fa-camera text-2xl"></i>
+                            </div>
+                            <span class="font-semibold text-gray-700">Tecnología</span>
+                        </div>
+                        <div onclick="navigateTo('explore', 'Deportes')" class="group bg-gray-50 border border-gray-100 hover:border-brand hover:shadow-md p-6 rounded-2xl flex flex-col items-center justify-center cursor-pointer transition">
+                            <div class="w-14 h-14 bg-brand/10 text-brand rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition">
+                                <i class="fa-solid fa-bicycle text-2xl"></i>
+                            </div>
+                            <span class="font-semibold text-gray-700">Deportes</span>
+                        </div>
+                        <div onclick="navigateTo('explore', 'Eventos')" class="group bg-gray-50 border border-gray-100 hover:border-brand hover:shadow-md p-6 rounded-2xl flex flex-col items-center justify-center cursor-pointer transition">
+                            <div class="w-14 h-14 bg-brand/10 text-brand rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition">
+                                <i class="fa-solid fa-champagne-glasses text-2xl"></i>
+                            </div>
+                            <span class="font-semibold text-gray-700">Eventos</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- === VISTA: EXPLORAR (CATÁLOGO COMPLETO) === -->
+        <div id="explore" class="page-view py-10 bg-gray-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
+                    <div>
+                        <h2 class="text-3xl font-bold text-dark" id="explore-title">Todos los artículos</h2>
+                        <p class="text-gray-500 mt-1"><i class="fa-solid fa-location-dot mr-1"></i> Ciudad de Panamá</p>
+                    </div>
+                    <button onclick="navigateTo('home')" class="text-brand hover:text-brand-dark font-medium"><i class="fa-solid fa-arrow-left mr-1"></i> Volver al inicio</button>
+                </div>
+
+                <!-- Grid de 8 Productos -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8" id="product-grid">
+                    
+                    <!-- 1. Hidrolavadora (Requerida) -->
+                    <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow border border-gray-100 flex flex-col item-card" data-category="Herramientas">
+                        <div class="relative h-48 overflow-hidden group bg-gray-200">
+                            <img src="https://s1.kaercher-media.com/mam/11806430/mainproduct/82483/d0.jpg" alt="Hidrolavadora" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                            <div class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg text-sm font-bold text-gray-800"><i class="fa-solid fa-star text-yellow-400 text-xs"></i> 4.9</div>
+                        </div>
+                        <div class="p-5 flex-1 flex flex-col">
+                            <h3 class="font-bold text-lg text-gray-900 leading-tight mb-2">Hidrolavadora a presión de alta gama</h3>
+                            <p class="text-gray-500 text-sm mb-4"><i class="fa-solid fa-toolbox mr-1"></i> Herramientas</p>
+                            <div class="mt-auto flex justify-between items-center">
+                                <div><span class="text-2xl font-black text-brand">$15</span><span class="text-gray-500 text-sm"> / día</span></div>
+                                <button onclick="openBookingModal('Hidrolavadora a presión', 15)" class="bg-gray-900 hover:bg-brand text-white px-4 py-2 rounded-lg font-medium transition text-sm">Rentar</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. Taladro Inalámbrico -->
+                    <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow border border-gray-100 flex flex-col item-card" data-category="Herramientas">
+                        <div class="relative h-48 overflow-hidden group bg-gray-200">
+                            <img src="https://images.unsplash.com/photo-1504148455328-c376907d081c?w=600&auto=format&fit=crop&q=80" alt="Taladro" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                            <div class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg text-sm font-bold text-gray-800"><i class="fa-solid fa-star text-yellow-400 text-xs"></i> 4.8</div>
+                        </div>
+                        <div class="p-5 flex-1 flex flex-col">
+                            <h3 class="font-bold text-lg text-gray-900 leading-tight mb-2">Kit Taladro Inalámbrico Profesional</h3>
+                            <p class="text-gray-500 text-sm mb-4"><i class="fa-solid fa-toolbox mr-1"></i> Herramientas</p>
+                            <div class="mt-auto flex justify-between items-center">
+                                <div><span class="text-2xl font-black text-brand">$12</span><span class="text-gray-500 text-sm"> / día</span></div>
+                                <button onclick="openBookingModal('Taladro Inalámbrico', 12)" class="bg-gray-900 hover:bg-brand text-white px-4 py-2 rounded-lg font-medium transition text-sm">Rentar</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. Cámara DSLR -->
+                    <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow border border-gray-100 flex flex-col item-card" data-category="Tecnología">
+                        <div class="relative h-48 overflow-hidden group bg-gray-200">
+                            <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=600&auto=format&fit=crop&q=80" alt="Cámara" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                            <div class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg text-sm font-bold text-gray-800"><i class="fa-solid fa-star text-yellow-400 text-xs"></i> 5.0</div>
+                        </div>
+                        <div class="p-5 flex-1 flex flex-col">
+                            <h3 class="font-bold text-lg text-gray-900 leading-tight mb-2">Cámara Réflex DSLR + Lente 50mm</h3>
+                            <p class="text-gray-500 text-sm mb-4"><i class="fa-solid fa-camera mr-1"></i> Tecnología</p>
+                            <div class="mt-auto flex justify-between items-center">
+                                <div><span class="text-2xl font-black text-brand">$35</span><span class="text-gray-500 text-sm"> / día</span></div>
+                                <button onclick="openBookingModal('Cámara DSLR', 35)" class="bg-gray-900 hover:bg-brand text-white px-4 py-2 rounded-lg font-medium transition text-sm">Rentar</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4. Consola / Control (Gaming) -->
+                    <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow border border-gray-100 flex flex-col item-card" data-category="Tecnología">
+                        <div class="relative h-48 overflow-hidden group bg-gray-200">
+                            <img src="https://images.unsplash.com/photo-1486401899868-0e435ed85128?w=600&auto=format&fit=crop&q=80" alt="Consola" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                            <div class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg text-sm font-bold text-gray-800"><i class="fa-solid fa-star text-yellow-400 text-xs"></i> 4.7</div>
+                        </div>
+                        <div class="p-5 flex-1 flex flex-col">
+                            <h3 class="font-bold text-lg text-gray-900 leading-tight mb-2">Consola de Videojuegos PlayStation5</h3>
+                            <p class="text-gray-500 text-sm mb-4"><i class="fa-solid fa-gamepad mr-1"></i> Tecnología</p>
+                            <div class="mt-auto flex justify-between items-center">
+                                <div><span class="text-2xl font-black text-brand">$20</span><span class="text-gray-500 text-sm"> / día</span></div>
+                                <button onclick="openBookingModal('Consola Videojuegos', 20)" class="bg-gray-900 hover:bg-brand text-white px-4 py-2 rounded-lg font-medium transition text-sm">Rentar</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 5. Bicicleta de Montaña -->
+                    <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow border border-gray-100 flex flex-col item-card" data-category="Deportes">
+                        <div class="relative h-48 overflow-hidden group bg-gray-200">
+                            <img src="https://carbonestore.com/cdn/shop/products/21__2_BCT-BIMBEC165_800x.jpg?v=1670179366" alt="Bicicleta" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                            <div class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg text-sm font-bold text-gray-800"><i class="fa-solid fa-star text-yellow-400 text-xs"></i> 4.9</div>
+                        </div>
+                        <div class="p-5 flex-1 flex flex-col">
+                            <h3 class="font-bold text-lg text-gray-900 leading-tight mb-2">Bicicleta de Montaña (Talla M)</h3>
+                            <p class="text-gray-500 text-sm mb-4"><i class="fa-solid fa-bicycle mr-1"></i> Deportes</p>
+                            <div class="mt-auto flex justify-between items-center">
+                                <div><span class="text-2xl font-black text-brand">$18</span><span class="text-gray-500 text-sm"> / día</span></div>
+                                <button onclick="openBookingModal('Bicicleta Montaña', 18)" class="bg-gray-900 hover:bg-brand text-white px-4 py-2 rounded-lg font-medium transition text-sm">Rentar</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 6. Tienda de Campaña -->
+                    <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow border border-gray-100 flex flex-col item-card" data-category="Deportes">
+                        <div class="relative h-48 overflow-hidden group bg-gray-200">
+                            <img src="https://rodelag.com/cdn/shop/files/PS0005583_7.jpg?v=1761236921" alt="Camping" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                            <div class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg text-sm font-bold text-gray-800"><i class="fa-solid fa-star text-yellow-400 text-xs"></i> 4.6</div>
+                        </div>
+                        <div class="p-5 flex-1 flex flex-col">
+                            <h3 class="font-bold text-lg text-gray-900 leading-tight mb-2">Tienda de Campaña (4 Personas)</h3>
+                            <p class="text-gray-500 text-sm mb-4"><i class="fa-solid fa-campground mr-1"></i> Deportes</p>
+                            <div class="mt-auto flex justify-between items-center">
+                                <div><span class="text-2xl font-black text-brand">$10</span><span class="text-gray-500 text-sm"> / día</span></div>
+                                <button onclick="openBookingModal('Tienda de Campaña', 10)" class="bg-gray-900 hover:bg-brand text-white px-4 py-2 rounded-lg font-medium transition text-sm">Rentar</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 7. Reloj Clásico Elegante -->
+                    <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow border border-gray-100 flex flex-col item-card" data-category="Eventos">
+                        <div class="relative h-48 overflow-hidden group bg-gray-200">
+                            <img src="https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=600&auto=format&fit=crop&q=80" alt="Reloj" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                            <div class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg text-sm font-bold text-gray-800"><i class="fa-solid fa-star text-yellow-400 text-xs"></i> 5.0</div>
+                        </div>
+                        <div class="p-5 flex-1 flex flex-col">
+                            <h3 class="font-bold text-lg text-gray-900 leading-tight mb-2">Reloj Clásico de Lujo (Bodas/Galas)</h3>
+                            <p class="text-gray-500 text-sm mb-4"><i class="fa-solid fa-clock mr-1"></i> Eventos</p>
+                            <div class="mt-auto flex justify-between items-center">
+                                <div><span class="text-2xl font-black text-brand">$40</span><span class="text-gray-500 text-sm"> / día</span></div>
+                                <button onclick="openBookingModal('Reloj Clásico', 40)" class="bg-gray-900 hover:bg-brand text-white px-4 py-2 rounded-lg font-medium transition text-sm">Rentar</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 8. Mobiliario Eventos / Sillas -->
+                    <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow border border-gray-100 flex flex-col item-card" data-category="Eventos">
+                        <div class="relative h-48 overflow-hidden group bg-gray-200">
+                            <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=600&auto=format&fit=crop&q=80" alt="Evento" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                            <div class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg text-sm font-bold text-gray-800"><i class="fa-solid fa-star text-yellow-400 text-xs"></i> 4.5</div>
+                        </div>
+                        <div class="p-5 flex-1 flex flex-col">
+                            <h3 class="font-bold text-lg text-gray-900 leading-tight mb-2">Set de 10 Sillas y 2 Mesas Plegables</h3>
+                            <p class="text-gray-500 text-sm mb-4"><i class="fa-solid fa-chair mr-1"></i> Eventos</p>
+                            <div class="mt-auto flex justify-between items-center">
+                                <div><span class="text-2xl font-black text-brand">$25</span><span class="text-gray-500 text-sm"> / día</span></div>
+                                <button onclick="openBookingModal('Set Sillas y Mesas', 25)" class="bg-gray-900 hover:bg-brand text-white px-4 py-2 rounded-lg font-medium transition text-sm">Rentar</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- === VISTA: CÓMO FUNCIONA === -->
+        <div id="how-it-works" class="page-view py-20 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h2 class="text-3xl font-bold text-dark mb-4">¿Cómo funciona QuickRent?</h2>
+                <p class="text-gray-500 max-w-2xl mx-auto mb-16 text-lg">Alquilar lo que necesitas o ganar dinero con tus artículos es más fácil de lo que piensas.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-12 relative">
+                    <div class="hidden md:block absolute top-12 left-[15%] right-[15%] h-0.5 bg-gray-100 -z-10"></div>
+                    
+                    <div class="relative">
+                        <div class="w-24 h-24 mx-auto bg-white border-4 border-brand text-brand rounded-full flex items-center justify-center shadow-lg mb-6 z-10 relative">
+                            <i class="fa-solid fa-magnifying-glass text-3xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">1. Encuentra lo que necesitas</h3>
+                        <p class="text-gray-600">Busca entre cientos de artículos. Filtra por categoría, precio y ubicación.</p>
+                    </div>
+                    
+                    <div class="relative">
+                        <div class="w-24 h-24 mx-auto bg-brand text-white rounded-full flex items-center justify-center shadow-lg mb-6 z-10 relative">
+                            <i class="fa-regular fa-calendar-check text-3xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">2. Coordina la entrega</h3>
+                        <p class="text-gray-600">Reserva por los días que necesites y coordina con el propietario.</p>
+                    </div>
+                    
+                    <div class="relative">
+                        <div class="w-24 h-24 mx-auto bg-white border-4 border-brand text-brand rounded-full flex items-center justify-center shadow-lg mb-6 z-10 relative">
+                            <i class="fa-regular fa-star text-3xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">3. Devuélvelo y califica</h3>
+                        <p class="text-gray-600">Devuelve el artículo a tiempo y deja una reseña para la comunidad.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-gray-400 py-8 text-center mt-auto border-t border-gray-800">
+        <p>&copy; 2026 QuickRent. Todos los derechos reservados.</p>
+    </footer>
+
+    <!-- MODALES -->
+    <!-- Modal Subir Artículo -->
+    <div id="uploadModal" class="fixed inset-0 z-[100] hidden">
+        <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm" onclick="closeModal('uploadModal')"></div>
+        <div class="flex items-center justify-center min-h-screen px-4">
+            <div class="relative bg-white rounded-2xl text-left shadow-2xl p-6 sm:p-8 w-full max-w-lg">
+                <div class="flex justify-between items-center mb-5">
+                    <h3 class="text-2xl font-bold text-gray-900">Publicar artículo</h3>
+                    <button onclick="closeModal('uploadModal')" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-xl"></i></button>
+                </div>
+                <form onsubmit="event.preventDefault(); alert('¡Artículo publicado con éxito!'); closeModal('uploadModal');">
+                    <input type="text" required placeholder="Nombre del artículo" class="w-full px-4 py-3 mb-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand outline-none">
+                    <select required class="w-full px-4 py-3 mb-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand outline-none">
+                        <option value="">Selecciona una categoría...</option>
+                        <option>Herramientas</option>
+                        <option>Tecnología</option>
+                        <option>Deportes</option>
+                        <option>Eventos</option>
+                    </select>
+                    <input type="number" required placeholder="Precio por día ($)" class="w-full px-4 py-3 mb-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand outline-none">
+                    <button type="submit" class="w-full bg-brand hover:bg-brand-dark text-white font-bold py-3 rounded-xl transition">Publicar Artículo</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Reserva -->
+    <div id="bookingModal" class="fixed inset-0 z-[100] hidden">
+        <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm" onclick="closeModal('bookingModal')"></div>
+        <div class="flex items-center justify-center min-h-screen px-4 text-center">
+            <div class="relative bg-white rounded-2xl p-8 w-full max-w-md text-left shadow-2xl">
+                <button onclick="closeModal('bookingModal')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-xl"></i></button>
+                <div class="flex items-center justify-center w-12 h-12 bg-blue-100 rounded-full mb-4 mx-auto">
+                    <i class="fa-regular fa-calendar-check text-2xl text-brand"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-1 text-center" id="bookingTitle">Confirmar Reserva</h3>
+                <p class="text-gray-600 font-medium mb-6 text-center" id="bookingItemName">Nombre del artículo</p>
+                
+                <div class="bg-gray-50 p-5 rounded-xl mb-6 border border-gray-200">
+                    <div class="flex justify-between mb-3 text-gray-700"><span>Precio por día:</span><span id="bookingPrice" class="font-bold">$0</span></div>
+                    <div class="flex justify-between items-center text-gray-700 mb-3">
+                        <span>Días a rentar:</span>
+                        <input type="number" id="bookingDays" value="1" min="1" max="30" class="w-20 border border-gray-300 rounded-md px-3 py-1 outline-none focus:border-brand" onchange="updateTotal()" onkeyup="updateTotal()">
+                    </div>
+                    <hr class="my-3 border-gray-200">
+                    <div class="flex justify-between font-bold text-lg"><span>Total estimado:</span><span id="bookingTotal" class="text-brand">$0</span></div>
+                </div>
+                <button onclick="alert('¡Reserva confirmada! El propietario ha sido notificado.'); closeModal('bookingModal')" class="w-full bg-dark hover:bg-black text-white font-bold py-3 rounded-xl transition shadow-lg">Confirmar y Rentar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script SPA y Modales -->
+    <script>
+        let currentItemPrice = 0;
+
+        function navigateTo(viewId, categoryFilter = null) {
+            // Ocultar todas las vistas
+            document.querySelectorAll('.page-view').forEach(el => el.classList.remove('active'));
+            // Mostrar la solicitada
+            document.getElementById(viewId).classList.add('active');
+            window.scrollTo(0, 0);
+
+            // Filtro de categorías en la vista 'explore'
+            if (viewId === 'explore') {
+                const cards = document.querySelectorAll('.item-card');
+                const title = document.getElementById('explore-title');
+                
+                if (categoryFilter) {
+                    title.innerText = `Resultados: ${categoryFilter}`;
+                    cards.forEach(card => {
+                        if (card.dataset.category === categoryFilter) card.style.display = 'flex';
+                        else card.style.display = 'none';
+                    });
+                } else {
+                    title.innerText = 'Todos los artículos';
+                    cards.forEach(card => card.style.display = 'flex');
+                }
+            }
+        }
+
+        function openModal(id) {
+            document.getElementById(id).classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function openBookingModal(name, price) {
+            document.getElementById('bookingItemName').innerText = name;
+            document.getElementById('bookingPrice').innerText = "$" + price;
+            currentItemPrice = price;
+            document.getElementById('bookingDays').value = 1;
+            updateTotal();
+            openModal('bookingModal');
+        }
+
+        function updateTotal() {
+            let days = parseInt(document.getElementById('bookingDays').value) || 1;
+            if (days < 1) { days = 1; document.getElementById('bookingDays').value = 1; }
+            document.getElementById('bookingTotal').innerText = "$" + (days * currentItemPrice);
+        }
+    </script>
+</body>
+</html>
